@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Profile
 
 
 @admin.register(Post)
@@ -7,6 +7,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'published_date', 'user', 'content_length']
     list_filter = ['category', 'published_date']
     search_fields = ['title', 'content']
+    filter_horizontal = ['tags']
     ordering = ('-published_date',)
     list_per_page = 10
 
@@ -25,3 +26,11 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     search_fields = ['name']
     ordering = ('name',)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+    search_fields = ['user_username']
+    ordering = ('user',)
+
+

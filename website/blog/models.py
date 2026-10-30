@@ -48,4 +48,21 @@ class Post(models.Model):
         verbose_name_plural = 'Публікації'
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Користувач')
+    bio = models.TextField(blank=True, verbose_name='Про себе')
+    city = models.CharField(max_length=100, blank=True, verbose_name='Місто')
+    birth_date = models.DateField(blank=True, null=True, verbose_name='Дата народження')
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        ordering = ['user']
+        verbose_name = 'Профіль'
+        verbose_name_plural = 'Профілі'
+
+
+
+
 
