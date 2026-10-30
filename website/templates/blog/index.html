@@ -17,14 +17,19 @@
         </ul>
 
         <h2 class="post-title">
-        <a href="post.html">{{ post.title }}</a>
+        <a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a>
         </h2>
         <p class="byline">
-            by <a href="index.html">{{ post.user }}</a>
+            Category: {{ post.category }}
+        </p>
+        <p class="byline">
+            by <a href="{% url 'blog:profile_detail' post.user.id %}">{{ post.user }}</a>
         </p>
         <p>◷ Posted on {{ post.published_date }}</p>
         <img alt="Abstract editorial illustration" class="img-fluid feature-image" src="{% static 'blog/assets/feature.svg' %}"/>
-        <p>{{ post.content|truncatewords:20 }}</p><a class="btn btn-accent" href="{% url 'blog:post_detail' post.id %}">Read article →</a></section>
+        <p>{{ post.content|truncatewords:20 }}</p>
+        <a class="btn btn-accent" href="{% url 'blog:post_detail' post.id %}">Read article →</a>
+    </section>
 
 
 {% empty %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -35,3 +36,11 @@ def get_post(request, post_id):
 def contact(request):
     context = {}
     return render(request, 'blog/contact.html', context)
+
+
+def profile_detail(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    posts = Post.objects.filter(user=user)
+    context = {'user': user, 'posts': posts, 'tags': Tag.objects.all()}
+    context.update(get_categories())
+    return render(request, 'blog/profile.html', context)
