@@ -33,11 +33,16 @@
             <div class="sidebar-card">
                 <h4 class="sidebar-heading">Blog Search</h4>
                 <div class="input-group">
-                    <input aria-label="Search articles" class="form-control" placeholder="Search articles..."
-                           type="text"/>
+                    <form method="get">
+                        <input aria-label="Search articles" class="form-control" placeholder="Search articles..."
+                           type="text" value="{{ query }}" name="q"/>
 
-                    <button class="btn btn-search" type="button">Search</button>
+                        <button class="btn btn-search" type="submit">Search</button>
 
+                        {% if selected_category %}
+                            <input type="hidden" name="category" value="{{ selected_category }}"/>
+                        {% endif %}
+                    </form>
                 </div>
                 <!-- /.input-group -->
             </div>
@@ -48,7 +53,7 @@
                     <div class="col-6">
                         <ul class="list-unstyled category-list">
                             {% for category in categories %}
-                                <li><a href="#">{{ category.name }}</a></li>
+                                <li><a href="?category={{ category.id }}">{{ category.name }}</a></li>
                             {% empty %}
                                 <p>Категорій немає</p>
                             {% endfor %}
@@ -58,7 +63,7 @@
                     <div class="col-6">
                         <ul class="list-unstyled category-list">
                            {% for category in categories2 %}
-                                <li><a href="#">{{ category.name }}</a></li>
+                                <li><a href="?category={{ category.id }}">{{ category.name }}</a></li>
                             {% empty %}
                                 <p>Категорій немає</p>
                             {% endfor %}

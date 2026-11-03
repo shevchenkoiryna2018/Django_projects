@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Category, Tag, Profile
+from .models import Post, Category, Tag, Profile, Comment
 
 
 @admin.register(Post)
@@ -33,4 +33,16 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ['user_username']
     ordering = ('user',)
 
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'post', 'author', 'created_at', 'text_length']
+    list_filter = ['created_at']
+    search_fields = ['author__username', 'text', 'post__title']
+    ordering = ('-created_at',)
+    list_per_page = 10
+
+    @admin.display(description="Довжина коментаря")
+    def text_length(self, obj):
+        return len(obj.text)
 

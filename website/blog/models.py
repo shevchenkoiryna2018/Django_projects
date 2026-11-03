@@ -32,7 +32,9 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категорія')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='Тег')
-    # slug = models.SlugField(max_length=200, unique=True)
+    image = models.ImageField(upload_to='posts/', blank=True, verbose_name='Обкладинка')
+
+    # slug = models.SlugField(max_length=200, unique=True, blank=True)
     #
     # def save(self, *args, **kwargs):
     #     if not self.slug:
@@ -63,6 +65,19 @@ class Profile(models.Model):
         verbose_name_plural = 'Профілі'
 
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', verbose_name='Публікація')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    text = models.TextField(verbose_name='Текст коментаря')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата створення')
 
+    def __str__(self):
+        text = self.text[:50] + '...' if len(self.text) > 50 else self.text
+        return text
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Коментар'
+        verbose_name_plural = 'Коментарі'
 
 
