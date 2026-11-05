@@ -1,9 +1,10 @@
+from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
-from .forms import PostForm
+from .forms import PostForm, RegisterForm
 from .models import Post, Category, Tag, Comment
 from django.db.models import Q
 
@@ -91,6 +92,21 @@ def post_update(request, id):
         form = PostForm(instance=post)
     return render(request, 'blog/post_update.html', {'form': form})
 
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('/')
+    else:
+        form = RegisterForm()
+
+    return render(request, 'register.html', {'form': form})
 
 
 
