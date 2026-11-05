@@ -37,15 +37,48 @@
 {% endfor %}
 
 
-
-<!-- Pager -->
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
 <ul class="pager d-flex justify-content-between list-unstyled mt-4">
-    <li class="previous">
-        <a class="pager-link" href="#">← Older</a>
+
+    {% if page_obj.has_previous %}
+        <li class="previous">
+            <a class="pager-link"
+               href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if query %}q={{ query|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                ← Newer
+            </a>
+        </li>
+    {% else %}
+        <li></li>
+    {% endif %}
+
+    <li class="text-muted">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
     </li>
-    <li class="next">
-        <a class="pager-link" href="#">Newer →</a>
-    </li>
+
+    {% if page_obj.has_next %}
+        <li class="next">
+            <a class="pager-link"
+               href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if query %}q={{ query|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">
+                Older →
+            </a>
+        </li>
+    {% else %}
+        <li></li>
+    {% endif %}
+
 </ul>
+{% endif %}
+
+
+<!--&lt;!&ndash; Pager &ndash;&gt;-->
+<!--<ul class="pager d-flex justify-content-between list-unstyled mt-4">-->
+<!--    <li class="previous">-->
+<!--        <a class="pager-link" href="#">← Older</a>-->
+<!--    </li>-->
+<!--    <li class="next">-->
+<!--        <a class="pager-link" href="#">Newer →</a>-->
+<!--    </li>-->
+<!--</ul>-->
 
 {% endblock %}

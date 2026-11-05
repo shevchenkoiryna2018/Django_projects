@@ -32,7 +32,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категорія')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='Тег')
-    image = models.ImageField(upload_to='posts/', blank=True, verbose_name='Обкладинка')
+    image = models.ImageField(upload_to='posts/', verbose_name='Обкладинка')
 
     # slug = models.SlugField(max_length=200, unique=True, blank=True)
     #

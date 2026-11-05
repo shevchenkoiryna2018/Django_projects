@@ -1,12 +1,13 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-
 from .forms import PostForm, RegisterForm
 from .models import Post, Category, Tag, Comment
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def dummy():
@@ -21,6 +22,24 @@ def get_categories():
 
 
 # Create your views here.
+# def index(request):
+#     posts = Post.objects.all()
+#     tags = Tag.objects.all()
+#
+#     category_id = request.GET.get('category', None)
+#     query = request.GET.get('q', "").strip()
+#
+#     if category_id:
+#         posts = posts.filter(category=category_id)
+#
+#     if query:
+#         posts = posts.filter(Q(title__icontains=query) | Q(content__icontains=query))
+#
+#     context = {'posts': posts, 'tags': tags, 'selected_category': category_id}
+#     context.update(get_categories())
+#     return render(request, 'blog/index.html', context)
+
+
 def index(request):
     posts = Post.objects.all()
     tags = Tag.objects.all()
@@ -32,10 +51,26 @@ def index(request):
         posts = posts.filter(category=category_id)
 
     if query:
-        posts = posts.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
 
-    context = {'posts': posts, 'tags': tags, 'selected_category': category_id}
+    # Пагінація
+    paginator = Paginator(posts, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'posts': page_obj,
+        'page_obj': page_obj,
+        'tags': tags,
+        'selected_category': category_id,
+        'query': query,
+    }
+
     context.update(get_categories())
+
     return render(request, 'blog/index.html', context)
 
 
@@ -65,6 +100,7 @@ def profile_detail(request, user_id):
     return render(request, 'blog/profile.html', context)
 
 
+@login_required
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -81,6 +117,7 @@ def post_create(request):
     return render(request, 'blog/post_create.html', {'form': form})
 
 
+@login_required
 def post_update(request, id):
     post = get_object_or_404(Post, id=id, user=request.user)
     if request.method == 'POST':
