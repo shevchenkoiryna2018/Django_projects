@@ -21,6 +21,7 @@
         <p>Тегів немає</p>
     {% endfor %}
 </ul>
+
 <!-- Author -->
 <p class="byline">
     Category: {{ post.category }}
@@ -29,73 +30,49 @@
     by <a href="{% url 'blog:profile_detail' post.user.id %}">{{ post.user }}</a>
 </p>
 <hr class="soft-divider"/>
+
 <!-- Date/Time -->
 <p>◷ Posted on {{ post.published_date }}</p>
 <hr class="soft-divider"/>
+
 <!-- Preview Image -->
 <!--<img alt="Abstract editorial illustration" class="img-fluid feature-image" src="{% static 'blog/assets/feature.svg' %}"/>-->
 <hr class="soft-divider"/>
+
 <!-- Post Content -->
 <p class="lead intro-text">{{ post.content }}</p>
 <hr class="soft-divider"/>
 <a class="btn btn-accent" href="{% url 'blog:index'%}">← Back to Blog</a>
+
 <!-- Blog Comments -->
-<!-- Comments Form -->
-<div class="comment-box">
-    <h4>Leave a Comment:</h4>
-    <form class="comment-form"
-          onsubmit='event.preventDefault(); this.querySelector("textarea").value=""; this.querySelector(".form-feedback").textContent="Thanks! This demo does not save comments.";'
-          role="form">
-        <div class="form-group">
-                    <textarea aria-label="Comment" class="form-control" placeholder="Share your thoughts..."
-                              rows="3"></textarea>
-        </div>
-        <button class="btn btn-accent" type="submit">Submit</button>
-        <p class="form-feedback mt-2"></p></form>
-</div>
 <hr class="soft-divider"/>
-<!-- Posted Comments -->
-<!-- Comment -->
-<div class="comment-item">
-    <a class="avatar-wrap" href="#">
-        <img alt="Comment author avatar" class="avatar" src="{% static 'blog/assets/avatar.svg' %}"/>
-    </a>
-    <div class="comment-body">
-        <h4 class="comment-author">Start Bootstrap
-            <small class="comment-date">August 25, 2014 at 9:30 PM</small>
-        </h4>
-        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.
-        Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-        vulputate fringilla. Donec lacinia congue felis in faucibus.
-    </div>
-</div>
-<!-- Comment -->
-<div class="comment-item">
-    <a class="avatar-wrap" href="#">
-        <img alt="Comment author avatar" class="avatar" src="{% static 'blog/assets/avatar.svg' %}"/>
-    </a>
-    <div class="comment-body">
-        <h4 class="comment-author">Start Bootstrap
-            <small class="comment-date">August 25, 2014 at 9:30 PM</small>
-        </h4>
-        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.
-        Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-        vulputate fringilla. Donec lacinia congue felis in faucibus.
-        <!-- Nested Comment -->
-        <div class="comment-item">
-            <a class="avatar-wrap" href="#">
-                <img alt="Comment author avatar" class="avatar" src="{% static 'blog/assets/avatar.svg' %}"/>
-            </a>
-            <div class="comment-body">
-                <h4 class="comment-author">Nested Start Bootstrap
-                    <small class="comment-date">August 25, 2014 at 9:30 PM</small>
-                </h4>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin
-                commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce
-                condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
+
+<h3 class="mb-4">Коментарі ({{ comments.count }})</h3>
+
+{% for comment in comments %}
+    <div class="comment-item">
+        <div class="avatar-wrap">
+            <img alt="Comment author avatar"
+                 class="avatar"
+                 src="{% static 'blog/assets/avatar.svg' %}"/>
         </div>
-        <!-- End Nested Comment -->
+
+        <div class="comment-body">
+            <h4 class="comment-author">
+                {{ comment.author.username }}
+
+                <small class="comment-date">
+                    {{ comment.created_at|date:"d.m.Y H:i" }}
+                </small>
+            </h4>
+
+            <p>{{ comment.text|linebreaksbr }}</p>
+        </div>
     </div>
-</div>
+{% empty %}
+    <p class="text-muted">
+        Коментарів поки немає. Будьте першими!
+    </p>
+{% endfor %}
+
 {% endblock %}

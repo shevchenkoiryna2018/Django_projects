@@ -76,12 +76,12 @@ def index(request):
 
 def get_post(request, post_id): #post_slug - замість post_id
     post = get_object_or_404(Post, id=post_id) # slug=post_slug замість id=post_id
-    # comments = Comment.objects.all()
+    comments = post.comments.all()
 
     context = {
         'post': post,
         'tags': Tag.objects.all(),
-        # 'comments': comments
+        'comments': comments
     }
     context.update(get_categories())
     return render(request, 'blog/post.html', context)

@@ -26,7 +26,12 @@
             by <a href="{% url 'blog:profile_detail' post.user.id %}">{{ post.user }}</a>
         </p>
         <p>◷ Posted on {{ post.published_date }}</p>
-        <img alt="Abstract editorial illustration" class="img-fluid feature-image" src="{{ post.image.url }}"/>
+        {% if post.image %}
+            <img alt="{{ post.title }}"
+                 class="img-fluid feature-image"
+                 src="{{ post.image.url }}"/>
+        {% endif %}
+<!--        <img alt="Abstract editorial illustration" class="img-fluid feature-image" src="{{ post.image.url }}"/>-->
         <p>{{ post.content|truncatewords:20 }}</p>
         <a class="btn btn-accent" href="{% url 'blog:post_detail' post.id %}">Read article →</a>
     </section>
@@ -69,16 +74,5 @@
 
 </ul>
 {% endif %}
-
-
-<!--&lt;!&ndash; Pager &ndash;&gt;-->
-<!--<ul class="pager d-flex justify-content-between list-unstyled mt-4">-->
-<!--    <li class="previous">-->
-<!--        <a class="pager-link" href="#">← Older</a>-->
-<!--    </li>-->
-<!--    <li class="next">-->
-<!--        <a class="pager-link" href="#">Newer →</a>-->
-<!--    </li>-->
-<!--</ul>-->
 
 {% endblock %}
