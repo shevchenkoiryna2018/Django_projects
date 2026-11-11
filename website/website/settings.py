@@ -39,6 +39,10 @@ ALLOWED_HOSTS = [
 ]
 
 
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -148,4 +152,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+
 
