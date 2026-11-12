@@ -1,13 +1,14 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from .forms import PostForm, RegisterForm
-from .models import Post, Category, Tag, Comment
-from django.db.models import Q
+from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
+from .forms import PostForm, RegisterForm, CommentForm, SubscriberForm
+from .models import Post, Category, Tag, Comment
 
 
 def dummy():
@@ -74,15 +75,46 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
+def subscribe(request):
+    if request.method == 'POST':
+        form = SubscriberForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ви успішно підписалися на новини!')
+
+        else:
+            for errors in form.errors.values():
+                for error in errors:
+                    messages.error(request, error)
+
+    return redirect('blog:index')
+
 def get_post(request, post_id): #post_slug - замість post_id
     post = get_object_or_404(Post, id=post_id) # slug=post_slug замість id=post_id
     comments = post.comments.all()
 
+    if request.method == 'POST' and request.user.is_authenticated:
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+
+            return redirect('blog:post_detail', post_id=post_id)
+
+    else:
+        form = CommentForm()
+
     context = {
         'post': post,
         'tags': Tag.objects.all(),
-        'comments': comments
+        'comments': comments,
+        'form': form,
     }
+
     context.update(get_categories())
     return render(request, 'blog/post.html', context)
 

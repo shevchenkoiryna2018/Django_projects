@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Category, Tag, Profile, Comment
+from .models import Post, Category, Tag, Profile, Comment, Subscriber
 
 
 @admin.register(Post)
@@ -30,7 +30,7 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['id', 'user']
-    search_fields = ['user_username']
+    search_fields = ['user__username']
     ordering = ('user',)
 
 
@@ -45,4 +45,13 @@ class CommentAdmin(admin.ModelAdmin):
     @admin.display(description="Довжина коментаря")
     def text_length(self, obj):
         return len(obj.text)
+
+
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ['id', 'email', 'created_at']
+    search_fields = ['email']
+    ordering = ('-created_at',)
+    list_per_page = 10
+
 

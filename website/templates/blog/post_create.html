@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content %}
 
-<h1>Create new post</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="comment-box">
+                <h4 class="mb-4">Create new post</h4>
 
-<form method="POST" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
 
-    {% csrf_token %}
-    {{ form.as_p }}
-
-        <button type="submit">
-            Publish
-        </button>
-
-</form>
-
+                    <button type="submit" class="btn btn-accent">
+                        Publish
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

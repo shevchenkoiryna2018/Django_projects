@@ -81,3 +81,16 @@ class Comment(models.Model):
         verbose_name_plural = 'Коментарі'
 
 
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True, verbose_name='Електронна адреса')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата підписки')
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Підписник'
+        verbose_name_plural = 'Підписники'
+
+
